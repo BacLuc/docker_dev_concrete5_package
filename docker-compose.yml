@@ -1,0 +1,27 @@
+version: '3'
+services:
+  db:
+    image: mariadb:10.3-bionic
+    volumes:
+      - "./data/db:/var/lib/mysql"
+    env_file:
+      - ./.env
+    ports:
+      - ${MARIADB_PORT}:3306
+
+  concrete5:
+    build:
+      context: .
+      args:
+        CONCRETE_SUPPORT_FILES: $CONCRETE_SUPPORT_FILES
+        CONCRETE5_VERSION: $CONCRETE5_VERSION
+        CONCRETE5_LINK: $CONCRETE5_LINK
+    volumes:
+    - "./concrete5:/var/www/html"
+    - "./apache_log:/var/log/apache2"
+    ports:
+      - "8080:80"
+    links:
+      - db
+    env_file:
+      - "./.env"
