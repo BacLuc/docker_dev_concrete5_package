@@ -1,0 +1,5 @@
+packages/*
+!.keepme
+/.idea/
+application/config/*
+application/files/*
