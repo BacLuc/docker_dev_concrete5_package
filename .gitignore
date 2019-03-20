@@ -1,5 +1,7 @@
-packages/*
+concrete5/packages/*
+concrete5/application/files/*
+concrete5/application/config/*
+apache_log
+data
 !.keepme
 /.idea/
-application/config/*
-application/files/*

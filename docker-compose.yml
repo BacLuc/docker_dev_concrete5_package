@@ -1,0 +1,22 @@
+version: '0.1'
+services:
+  db:
+    image: mariadb:10.3-bionic
+    volumes:
+      - "./data/db:/var/lib/mysql"
+    env_file:
+      - ./.env
+    ports:
+      - ${MARIADB_PORT}:3306
+
+  concrete5:
+    build: .
+    volumes:
+    - "./concrete5:/var/www/html"
+    - "./apache_log:/var/log/apache2"
+    ports:
+      - "8080:80"
+    links:
+      - db
+    env_file:
+      - ./.env
