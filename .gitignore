@@ -1,6 +1,4 @@
-concrete5/packages/*
-concrete5/application/files/*
-concrete5/application/config/*
+concrete5/*
 apache_log
 data
 !.keepme

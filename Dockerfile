@@ -7,24 +7,43 @@ LABEL Description="Docker Container to develop concrete5 projects" \
 
 RUN rm /etc/apt/preferences.d/no-debian-php
 RUN apt-get update
-RUN apt-get install -y dos2unix mariadb-client iproute2 gettext-base
+RUN apt-get install -y dos2unix \
+                       mariadb-client \
+                       iproute2 \
+                       gettext-base \
+                       unzip \
+                       wget \
+                       git \
+                       zip \
+                       libjpeg-dev \
+                       libpng-dev \
+                       libfreetype6-dev
 RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-install gd
 RUN pecl install xdebug
 
 RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
-
-COPY docker/entrypoint.sh /usr/local/bin
-RUN dos2unix /usr/local/bin/entrypoint.sh
 
 ENV CONCRETE_SUPPORT_FILES=/usr/local/etc/concrete5/
 RUN mkdir -p $CONCRETE_SUPPORT_FILES
 COPY docker/*.sql $CONCRETE_SUPPORT_FILES
 COPY docker/database.php.template $CONCRETE_SUPPORT_FILES
 
+RUN wget https://github.com/concrete5/concrete5/archive/8.0.3.zip -O /usr/local/bin/concrete5.zip
+
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+RUN rm composer-setup.php
+
 VOLUME /var/www/html
 VOLUME /var/log/apache2
 
 EXPOSE 80
 EXPOSE 3306
+
+COPY docker/entrypoint.sh /usr/local/bin
+RUN dos2unix /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT exec bash -v /usr/local/bin/entrypoint.sh

@@ -14,44 +14,49 @@ echo "xdebug.remote_host=$GATEWAY" >> $XDEBUG_FILE
 
 CONCRETE5_DIR=/var/www/html
 
-mkdir -p $CONCRETE5_DIR/application/config
-envsubst < /usr/local/etc/concrete5/database.php.template > $CONCRETE5_DIR/application/config/database.php
+if [ ! -f $CONCRETE5_DIR/application/config/database.php ]; then
+   unzip /usr/local/bin/concrete5.zip -d /tmp
+   cp -a /tmp/concrete*/* $CONCRETE5_DIR/
+   cd /var/www/html
+   composer install
 
-chmod +x $CONCRETE5_DIR/concrete/bin/concrete5
+   mkdir -p $CONCRETE5_DIR/application/config
+   envsubst < /usr/local/etc/concrete5/database.php.template > $CONCRETE5_DIR/application/config/database.php
 
-chmod -R 755 $CONCRETE5_DIR/application/files/
-chown -R www-data $CONCRETE5_DIR/application/files/
+   mkdir -p $CONCRETE5_DIR/application/config/pro
 
-#because installing concrete5 is too slow, we use a database backup
-#where the theme is installed and set
-#this is the command how concrete5 was installed
-#$CONCRETE5_DIR/concrete/bin/concrete5 c5:install \
-#    --db-server=localhost \
-#    --db-username=root \
-#    --db-password=root \
-#    --db-database=$DATABASE_NAME \
-#    --site=concrete5_7 \
-#    --starting-point=elemental_blank \
-#    --admin-email=someemail@domain.ch \
-#    --admin-password=password \
-#    --default-locale=en_US
-MYSQL_OPTIONS="-h db -u $MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE"
+   mkdir -p /root/.ssh
+   touch /root/.ssh/known_hosts
+   ssh-keyscan github.com >> /root/.ssh/known_hosts
+   git clone https://github.com/BacLuc/bacluc_gryfenberg_theme.git $CONCRETE5_DIR/packages/bacluc_gryfenberg_theme
 
-until mysql $MYSQL_OPTIONS --execute 'exit'; do
-  >&2 echo "MySQL is unavailable - sleeping"
-  sleep 1
-done
+   #because installing concrete5 is too slow, we use a database backup
+   # where the theme is installed and set
+   # this is the command how concrete5 was installed
+   # $CONCRETE5_DIR/concrete/bin/concrete5 c5:install \
+   #    --db-server=localhost \
+   #    --db-username=root \
+   #    --db-password=root \
+   #    --db-database=$DATABASE_NAME \
+   #    --site=concrete5_7 \
+   #    --starting-point=elemental_blank \
+   #    --admin-email=someemail@domain.ch \
+   #    --admin-password=password \
+   #    --default-locale=en_US
+   MYSQL_OPTIONS="-h db -u $MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE"
+   until mysql $MYSQL_OPTIONS --execute 'exit'; do
+      >&2 echo "MySQL is unavailable - sleeping"
+      sleep 1
+   done
 
->&2 echo "MySQL is up - executing command"
+   >&2 echo "MySQL is up - executing command"
 
-mysql $MYSQL_OPTIONS < $CONCRETE_SUPPORT_FILES/concrete5_7_with_theme.sql
+   mysql $MYSQL_OPTIONS < $CONCRETE_SUPPORT_FILES/concrete5_7_with_theme.sql
+fi
 
-
-$CONCRETE5_DIR/concrete/bin/concrete5 c5:package-install basic_table_package
-
-chmod -R +x $CONCRETE5_DIR/application/files
-
-mysql $MYSQL_OPTIONS < $CONCRETE_SUPPORT_FILES/concrete5_7_with_basictable.sql
+chown -R $FILE_OWNER_UID:www-data $CONCRETE5_DIR
+chmod -R 775 $CONCRETE5_DIR
+chmod -R u+s $CONCRETE5_DIR
 
 service apache2 restart
 tail -f /dev/null
