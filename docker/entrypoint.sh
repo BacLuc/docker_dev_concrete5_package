@@ -17,17 +17,10 @@ CONCRETE5_DIR=/var/www/html
 if [ ! -f $CONCRETE5_DIR/application/config/database.php ]; then
    unzip /usr/local/bin/concrete5.zip -d /tmp
    cp -a /tmp/concrete*/* $CONCRETE5_DIR/
-   cd /var/www/html
-   composer install
 
    mkdir -p $CONCRETE5_DIR/application/config
    envsubst < /usr/local/etc/concrete5/database.php.template > $CONCRETE5_DIR/application/config/database.php
 
-   mkdir -p $CONCRETE5_DIR/application/config/pro
-
-   mkdir -p /root/.ssh
-   touch /root/.ssh/known_hosts
-   ssh-keyscan github.com >> /root/.ssh/known_hosts
    git clone https://github.com/BacLuc/bacluc_gryfenberg_theme.git $CONCRETE5_DIR/packages/bacluc_gryfenberg_theme
 
    #because installing concrete5 is too slow, we use a database backup
@@ -52,11 +45,13 @@ if [ ! -f $CONCRETE5_DIR/application/config/database.php ]; then
    >&2 echo "MySQL is up - executing command"
 
    mysql $MYSQL_OPTIONS < $CONCRETE_SUPPORT_FILES/concrete5_7_with_theme.sql
+
+   concrete/bin/concrete5 orm:generate-proxies
 fi
 
 chown -R $FILE_OWNER_UID:www-data $CONCRETE5_DIR
 chmod -R 775 $CONCRETE5_DIR
-chmod -R u+s $CONCRETE5_DIR
+chmod -R ug+s $CONCRETE5_DIR
 
 service apache2 restart
 tail -f /dev/null

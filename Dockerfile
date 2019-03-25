@@ -25,17 +25,34 @@ RUN pecl install xdebug
 
 RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
-ENV CONCRETE_SUPPORT_FILES=/usr/local/etc/concrete5/
+ARG CONCRETE_SUPPORT_FILES=/usr/local/etc/concrete5/
 RUN mkdir -p $CONCRETE_SUPPORT_FILES
 COPY docker/*.sql $CONCRETE_SUPPORT_FILES
 COPY docker/database.php.template $CONCRETE_SUPPORT_FILES
 
-RUN wget https://github.com/concrete5/concrete5/archive/8.0.3.zip -O /usr/local/bin/concrete5.zip
+
+RUN mkdir -p /root/.ssh \
+   && touch /root/.ssh/known_hosts \
+   && ssh-keyscan github.com >> /root/.ssh/known_hosts
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 RUN rm composer-setup.php
+
+ARG CONCRETE5_VERSION
+ARG CONCRETE5_LINK
+RUN wget $CONCRETE5_LINK -O /usr/local/bin/concrete5.zip \
+    && unzip /usr/local/bin/concrete5.zip -d /tmp \
+    && if [ -f /tmp/concrete$CONCRETE5_VERSION/composer.json ]; then \
+    cd /tmp/concrete$CONCRETE5_VERSION; \
+    composer install; \
+    fi \
+    && rm /usr/local/bin/concrete5.zip \
+    && cd /tmp \
+    && zip -r /usr/local/bin/concrete5.zip concrete$CONCRETE5_VERSION\
+    && rm -r /tmp/concrete$CONCRETE5_VERSION
+
 
 VOLUME /var/www/html
 VOLUME /var/log/apache2
