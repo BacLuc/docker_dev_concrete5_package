@@ -50,7 +50,10 @@ if [ ! -f $CONCRETE5_DIR/application/config/database.php ]; then
 fi
 
 chown -R $FILE_OWNER_UID:www-data $CONCRETE5_DIR
-chmod -R 775 $CONCRETE5_DIR
+chmod -R 754 $CONCRETE5_DIR
+chmod -R 774 $CONCRETE5_DIR/application/files
+chmod -R 774 $CONCRETE5_DIR/application/config
+chmod -R 754 $CONCRETE5_DIR/application/config/database.php
 chmod -R ug+s $CONCRETE5_DIR
 
 service apache2 restart
