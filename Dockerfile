@@ -38,6 +38,7 @@ RUN rm composer-setup.php
 ARG CONCRETE5_VERSION
 ARG CONCRETE5_LINK
 COPY docker/download-concrete5 /download-concrete5
+RUN chmod +x /download-concrete5
 RUN /download-concrete5 $CONCRETE5_VERSION
 
 

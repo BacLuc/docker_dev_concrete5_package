@@ -15,3 +15,6 @@ btp-use-prod:
 btp-use-dev:
 	rm -rf concrete5/packages/basic_table_package/vendor/*
 	docker-compose exec -w /var/www/html/packages/basic_table_package concrete5 composer install
+
+btp-download:
+	git clone -b rewrite git@github.com:BacLuc/basic_table_package.git concrete5/packages/basic_table_package
