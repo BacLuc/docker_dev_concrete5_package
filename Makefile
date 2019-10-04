@@ -11,20 +11,34 @@ start:
 
 setup-db:
 	docker-compose exec concrete5 rm -f /var/www/html/application/config/database.php
+	docker-compose exec db mysql --password=${MYSQL_ROOT_PASSWORD} -e "ALTER DATABASE ${MYSQL_DATABASE} CHARACTER SET = 'utf8'  COLLATE = 'utf8mb4_bin';"
 	docker-compose exec -w /var/www/html concrete5 concrete/bin/concrete5 \
 		c5:install \
 		--db-server=db \
 		--db-username=${MYSQL_USER}  \
 		--db-password=${MYSQL_PASSWORD}  \
 		--db-database=${MYSQL_PASSWORD} \
-		--admin-password=${CONCRETE5_ADMIN_PASSWORD}
-	docker-compose exec -w /var/www/html concrete5 concrete/bin/concrete5 c5:package-install bacluc_gryfenberg_theme
-	docker-compose exec -T db mysql concrete5 < docker/activate_bacluc_gryfenberg_theme.sql
+		--admin-password=${CONCRETE5_ADMIN_PASSWORD} \
+		--allow-as-root
+	docker-compose exec -w /var/www/html concrete5 concrete/bin/concrete5 c5:package-install --allow-as-root bacluc_gryfenberg_theme
+	docker-compose exec -T db mysql --password=${MYSQL_ROOT_PASSWORD} concrete5 < docker/activate_bacluc_gryfenberg_theme.sql
+
+wait:
+	sleep 60
+
+rebuild: remove start wait setup-db
+
+grant:
+	docker-compose exec db mysql -p -e ${GRANT}
 
 stop:
 	docker-compose down
 
-remove:
+remove-db:
 	docker-compose down -v
-	rm -r concrete5
-	rm -r apache_log
+
+remove-files:
+	rm -rf concrete5
+	rm -rf apache_log
+
+remove: remove-db remove-files
