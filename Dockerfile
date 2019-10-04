@@ -25,11 +25,6 @@ RUN pecl install xdebug
 
 RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
-ARG CONCRETE_SUPPORT_FILES=/usr/local/etc/concrete5/
-RUN mkdir -p $CONCRETE_SUPPORT_FILES
-COPY docker/*.sql $CONCRETE_SUPPORT_FILES
-COPY docker/database.php.template $CONCRETE_SUPPORT_FILES
-
 
 RUN mkdir -p /root/.ssh \
    && touch /root/.ssh/known_hosts \
@@ -42,16 +37,8 @@ RUN rm composer-setup.php
 
 ARG CONCRETE5_VERSION
 ARG CONCRETE5_LINK
-RUN wget $CONCRETE5_LINK -O /usr/local/bin/concrete5.zip \
-    && unzip /usr/local/bin/concrete5.zip -d /tmp \
-    && if [ -f /tmp/concrete$CONCRETE5_VERSION/composer.json ]; then \
-    cd /tmp/concrete$CONCRETE5_VERSION; \
-    composer install; \
-    fi \
-    && rm /usr/local/bin/concrete5.zip \
-    && cd /tmp \
-    && zip -r /usr/local/bin/concrete5.zip concrete$CONCRETE5_VERSION\
-    && rm -r /tmp/concrete$CONCRETE5_VERSION
+COPY docker/download-concrete5 /download-concrete5
+RUN /download-concrete5 $CONCRETE5_VERSION
 
 
 VOLUME /var/www/html

@@ -10,10 +10,19 @@ start:
 	docker-compose up -d
 
 setup-db:
+	docker-compose exec concrete5 rm -f /var/www/html/application/config/database.php
 	docker-compose exec db mysql -e ${DROP_DB}
 	docker-compose exec db mysql -e ${CREATE_DB}
 	docker-compose exec db mysql -e ${GRANT}
-	docker-compose exec -T db mysql concrete5 < docker/concrete5_7_with_theme.sql
+	docker-compose exec -w /var/www/html concrete5 concrete/bin/concrete5 \
+		c5:install \
+		--db-server=db \
+		--db-username=${MYSQL_USER}  \
+		--db-password=${MYSQL_PASSWORD}  \
+		--db-database=${MYSQL_PASSWORD} \
+		--admin-password=${CONCRETE5_ADMIN_PASSWORD}
+	docker-compose exec -w /var/www/html concrete5 concrete/bin/concrete5 c5:package-install bacluc_gryfenberg_theme
+	docker-compose exec -T db mysql concrete5 < docker/activate_bacluc_gryfenberg_theme.sql
 
 grant:
 	docker-compose exec db mysql -p -e ${GRANT}
@@ -23,3 +32,5 @@ stop:
 
 remove:
 	docker-compose down -v
+	rm -r concrete5
+	rm -r apache_log

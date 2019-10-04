@@ -19,32 +19,8 @@ if [ ! -f $CONCRETE5_DIR/application/config/database.php ]; then
    cp -a /tmp/concrete*/* $CONCRETE5_DIR/
 
    mkdir -p $CONCRETE5_DIR/application/config
-   envsubst < /usr/local/etc/concrete5/database.php.template > $CONCRETE5_DIR/application/config/database.php
 
    git clone https://github.com/BacLuc/bacluc_gryfenberg_theme.git $CONCRETE5_DIR/packages/bacluc_gryfenberg_theme
-
-   #because installing concrete5 is too slow, we use a database backup
-   # where the theme is installed and set
-   # this is the command how concrete5 was installed
-   # $CONCRETE5_DIR/concrete/bin/concrete5 c5:install \
-   #    --db-server=localhost \
-   #    --db-username=root \
-   #    --db-password=root \
-   #    --db-database=$DATABASE_NAME \
-   #    --site=concrete5_7 \
-   #    --starting-point=elemental_blank \
-   #    --admin-email=someemail@domain.ch \
-   #    --admin-password=password \
-   #    --default-locale=en_US
-   MYSQL_OPTIONS="-h db -u $MYSQL_USER --password=$MYSQL_PASSWORD $MYSQL_DATABASE"
-   until mysql $MYSQL_OPTIONS --execute 'exit'; do
-      >&2 echo "MySQL is unavailable - sleeping"
-      sleep 1
-   done
-
-   >&2 echo "MySQL is up - executing command"
-
-   mysql $MYSQL_OPTIONS < $CONCRETE_SUPPORT_FILES/concrete5_7_with_theme.sql
 
    concrete/bin/concrete5 orm:generate-proxies
 fi

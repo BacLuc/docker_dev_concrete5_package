@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+
+CONCRETE5_5_7_LINK=https://www.concrete5.org/download_file/-/view/93075/8497/
+
+GIT_RELEASES_LINK=https://codeload.github.com/concrete5/concrete5/zip
+
+concrete5_version=$1
+
+if [ $(version $concrete5_version) -eq $(version "5.7.5.13") ]; then
+    download_url=$CONCRETE5_5_7_LINK
+    concrete5_unzip_name=concrete
+elif [ $(version $concrete5_version) -ge $(version "8.1.0") ]; then
+    download_url=$GIT_RELEASES_LINK/$concrete5_version
+    concrete5_unzip_name="concrete5-"
+else
+    echo "unsupported version used"
+    echo "use version 5.7.5.13 or 8.1.0 and higher"
+    exit 1
+fi
+
+
+wget $download_url -O /usr/local/bin/concrete5.zip
+unzip -q /usr/local/bin/concrete5.zip -d /tmp
+if [ -f /tmp/$concrete5_unzip_name$concrete5_version/composer.json ]; then
+    cd /tmp/$concrete5_unzip_name$concrete5_version
+    composer install
+fi
+rm /usr/local/bin/concrete5.zip
+cd /tmp
+zip -q -r /usr/local/bin/concrete5.zip $concrete5_unzip_name$concrete5_version
+rm -r /tmp/$concrete5_unzip_name$concrete5_version
