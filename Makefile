@@ -11,7 +11,6 @@ start:
 
 setup-db:
 	docker-compose exec concrete5 rm -f /var/www/html/application/config/database.php
-	docker-compose exec db mysql --password=${MYSQL_ROOT_PASSWORD} -e "ALTER DATABASE ${MYSQL_DATABASE} CHARACTER SET = 'utf8'  COLLATE = 'utf8mb4_bin';"
 	docker-compose exec -w /var/www/html concrete5 concrete/bin/concrete5 \
 		c5:install \
 		--db-server=db \
@@ -19,7 +18,9 @@ setup-db:
 		--db-password=${MYSQL_PASSWORD}  \
 		--db-database=${MYSQL_PASSWORD} \
 		--admin-password=${CONCRETE5_ADMIN_PASSWORD} \
-		--allow-as-root
+		--allow-as-root \
+		-n \
+		--ignore-warnings
 	docker-compose exec -w /var/www/html concrete5 concrete/bin/concrete5 c5:package-install --allow-as-root bacluc_gryfenberg_theme
 	docker-compose exec -T db mysql --password=${MYSQL_ROOT_PASSWORD} concrete5 < docker/activate_bacluc_gryfenberg_theme.sql
 

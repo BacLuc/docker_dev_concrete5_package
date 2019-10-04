@@ -1,17 +1,10 @@
 #sudo git clone git@github.com:BacLuc/basic_table_package.git concrete5/packages/basic_table_package
 
-btp-install: btp-use-prod btp-install-pkg btp-use-dev
+btp-composer-install:
+	docker-compose exec -w /var/www/html/packages/basic_table_package concrete5 composer install
 
 btp-install-pkg:
 	docker-compose exec -w /var/www/html concrete5 concrete/bin/concrete5 c5:package-install --allow-as-root basic_table_package
 
-btp-uninstall: btp-use-prod
+btp-uninstall:
 	docker-compose exec -w /var/www/html concrete5 concrete/bin/concrete5 c5:package-uninstall --allow-as-root basic_table_package
-
-btp-use-prod:
-	rm -rf concrete5/packages/basic_table_package/vendor/*
-	docker-compose exec -w /var/www/html/packages/basic_table_package concrete5 composer install --no-dev
-
-btp-use-dev:
-	rm -rf concrete5/packages/basic_table_package/vendor/*
-	docker-compose exec -w /var/www/html/packages/basic_table_package concrete5 composer install
