@@ -3,7 +3,7 @@ services:
   db:
     image: mariadb:10.1-bionic
     volumes:
-      - "mariadbdata:/var/lib/mysql"
+      - mariadbdata:/var/lib/mysql
     env_file:
       - ./.env
     ports:
@@ -20,17 +20,17 @@ services:
         CONCRETE5_VERSION: $CONCRETE5_VERSION
     image: devbaclucpackages_concrete5:$CONCRETE5_VERSION
     volumes:
-      - "html:/var/www/html:nocopy"
-      - "./apache_log:/var/log/apache2"
-      - "vendor:/var/www/html/concrete/vendor"
-      - "config:/var/www/html/application/config"
-      - "files:/var/www/html/application/files"
+      - html:/var/www/html:nocopy
+      - ./apache_log:/var/log/apache2
+      - vendor:/var/www/html/concrete/vendor
+      - config:/var/www/html/application/config
+      - files:/var/www/html/application/files
     ports:
-      - "8080:80"
+      - 8080:80
     networks:
       - default
     env_file:
-      - "./.env"
+      - ./.env
 
     # lsyncd container to sync up host mount and named volume:
   rsync:
