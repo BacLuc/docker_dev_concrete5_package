@@ -20,14 +20,30 @@ services:
         CONCRETE5_VERSION: $CONCRETE5_VERSION
     image: devbaclucpackages_concrete5:$CONCRETE5_VERSION
     volumes:
-      - "./concrete5:/var/www/html:delegated"
+      - "html:/var/www/html:nocopy"
       - "./apache_log:/var/log/apache2"
+      - "vendor:/var/www/html/concrete/vendor"
+      - "config:/var/www/html/application/config"
+      - "files:/var/www/html/application/files"
     ports:
       - "8080:80"
     networks:
       - default
     env_file:
       - "./.env"
+
+    # lsyncd container to sync up host mount and named volume:
+  rsync:
+    image: bacluc/rsync:1.0
+    build:
+      context: ./docker
+      dockerfile: Dockerfile-rsync
+    command: tail -f /dev/null
+    volumes:
+      # The host mount for the shared directory:
+      - ./concrete5:/mnt/html
+      # The named volume for the shared directory:
+      - html:/var/www/html:nocopy
 
 networks:
   default:
@@ -36,3 +52,7 @@ networks:
 volumes:
   mariadbdata:
     driver: local
+  html:
+  vendor:
+  config:
+  files:
