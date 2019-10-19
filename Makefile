@@ -45,5 +45,9 @@ remove-files:
 
 sync-back-files:
 	docker-compose exec rsync rsync -rtog /var/www/html/ /mnt/html/
+	docker run -v docker_dev_concrete5_package_vendor:/from \
+	  -v $(pwd)/concrete5/concrete/vendor:/to \
+	  bacluc/rsync:1.0  \
+	  rsync -rtog /from/ /to/
 
 remove: remove-db remove-files
