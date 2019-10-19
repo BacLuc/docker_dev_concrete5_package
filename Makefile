@@ -43,4 +43,7 @@ remove-files:
 	rm -rf concrete5
 	rm -rf apache_log
 
+sync-back-files:
+	docker-compose exec rsync rsync -rtog /var/www/html/ /mnt/html/
+
 remove: remove-db remove-files
