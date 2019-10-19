@@ -45,6 +45,15 @@ services:
       # The named volume for the shared directory:
       - html:/var/www/html:nocopy
 
+  lsyncd:
+    image: allthings/lsyncd
+    command: -rsync /mnt/html /var/www/html
+    volumes:
+      # The host mount for the shared directory:
+      - ./concrete5:/mnt/html:delegated
+      # The named volume for the shared directory:
+      - html:/var/www/html:nocopy
+
 networks:
   default:
     driver: bridge
