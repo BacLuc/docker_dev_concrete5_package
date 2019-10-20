@@ -1,5 +1,14 @@
 concrete5/*
 apache_log
 data
-!.keepme
-/.idea/
+/.idea/composerJson.xml
+/.idea/dataSources
+/.idea/dataSources.local.xml
+/.idea/dataSources.xml
+/.idea/docker_dev_concrete5_package.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/remote-mappings.xml
+/.idea/vcs.xml
+/.idea/webResources.xml
+/.idea/workspace.xml
