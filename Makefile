@@ -25,6 +25,10 @@ setup-db:
 	docker-compose exec -w /var/www/html concrete5 concrete/bin/concrete5 c5:package-install --allow-as-root bacluc_gryfenberg_theme
 	docker-compose exec -T db mysql --password=${MYSQL_ROOT_PASSWORD} concrete5 < docker/activate_bacluc_gryfenberg_theme.sql
 
+set-permissions:
+	sudo chown -R $(whoami):www-data concrete5/
+	sudo chown -R $(whoami):www-data apache_log/
+
 wait:
 	sleep 60
 
