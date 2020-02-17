@@ -5,6 +5,7 @@ export $(shell sed 's/=.*//' .env)
 export DROP_DB="DROP DATABASE IF EXISTS ${MYSQL_DATABASE}"
 export CREATE_DB="CREATE DATABASE ${MYSQL_DATABASE} collate utf8mb4_bin;"
 export GRANT="GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
+export USER=$(shell whoami)
 
 start:
 	docker-compose up -d
@@ -26,8 +27,8 @@ setup-db:
 	docker-compose exec -T db mysql --password=${MYSQL_ROOT_PASSWORD} concrete5 < docker/activate_bacluc_gryfenberg_theme.sql
 
 set-permissions:
-	sudo chown -R $(whoami):www-data concrete5/
-	sudo chown -R $(whoami):www-data apache_log/
+	sudo chown -R ${USER}:www-data concrete5/
+	sudo chown -R ${USER}:www-data apache_log/
 
 wait:
 	sleep 60
