@@ -21,7 +21,6 @@ services:
     image: devbaclucpackages_concrete5:$CONCRETE5_VERSION
     volumes:
       - html:/var/www/html:nocopy
-      - ./apache_log:/var/log/apache2
       - vendor:/var/www/html/concrete/vendor
       - config:/var/www/html/application/config
       - files:/var/www/html/application/files
@@ -44,6 +43,7 @@ services:
       - ./concrete5:/mnt/html
       # The named volume for the shared directory:
       - html:/var/www/html:nocopy
+      - config:/var/www/html/application/config:nocopy
 
   lsyncd:
     image: allthings/lsyncd

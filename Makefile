@@ -13,27 +13,25 @@ start:
 setup-db:
 	docker-compose exec concrete5 rm -f /var/www/html/application/config/database.php
 	docker-compose exec db mysql --password=${MYSQL_ROOT_PASSWORD} -e "ALTER DATABASE ${MYSQL_DATABASE} CHARACTER SET = 'utf8mb4'  COLLATE = 'utf8mb4_general_ci';"
-	docker-compose exec -w /var/www/html concrete5 concrete/bin/concrete5 \
+	docker-compose exec --user www-data concrete5 concrete/bin/concrete5 \
 		c5:install \
 		--db-server=db \
 		--db-username=${MYSQL_USER}  \
 		--db-password=${MYSQL_PASSWORD}  \
 		--db-database=${MYSQL_PASSWORD} \
 		--admin-password=${CONCRETE5_ADMIN_PASSWORD} \
-		--allow-as-root \
 		-n \
 		--ignore-warnings
-	docker-compose exec -w /var/www/html concrete5 concrete/bin/concrete5 c5:package-install --allow-as-root bacluc_gryfenberg_theme
+	docker-compose exec  --user concrete5 concrete5 concrete/bin/concrete5 c5:package-install bacluc_gryfenberg_theme
 	docker-compose exec -T db mysql --password=${MYSQL_ROOT_PASSWORD} concrete5 < docker/activate_bacluc_gryfenberg_theme.sql
 
 set-permissions:
 	sudo chown -R ${USER}:www-data concrete5/
-	sudo chown -R ${USER}:www-data apache_log/
 
 wait:
 	sleep 60
 
-rebuild: remove start wait setup-db
+rebuild: remove start wait setup-db wait sync-back-files stop
 
 grant:
 	docker-compose exec db mysql -p -e ${GRANT}
@@ -45,14 +43,25 @@ remove-db:
 	docker-compose down -v
 
 remove-files:
-	rm -rf concrete5
-	rm -rf apache_log
+	sudo rm -rf concrete5
+
+sync-files:
+	docker-compose exec rsync rsync -rtog /mnt/html/ /var/www/html/
 
 sync-back-files:
 	docker-compose exec rsync rsync -rtog /var/www/html/ /mnt/html/
-	docker run -v docker_dev_concrete5_package_vendor:/from \
+	docker run --rm -v docker_dev_concrete5_package_vendor:/from \
 	  -v $(pwd)/concrete5/concrete/vendor:/to \
 	  bacluc/rsync:1.0  \
 	  rsync -rtog /from/ /to/
 
 remove: remove-db remove-files
+
+clear-cache:
+	docker-compose exec --user concrete5 concrete5 concrete/bin/concrete5 c5:clear-cache
+
+build-concrete5:
+	docker-compose build concrete5
+
+logs-concrete5:
+	docker-compose logs concrete5

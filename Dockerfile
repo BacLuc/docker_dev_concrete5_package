@@ -40,6 +40,10 @@ ARG CONCRETE5_VERSION
 ARG CONCRETE5_LINK
 COPY docker/download-concrete5 /download-concrete5
 RUN chmod +x /download-concrete5
+
+RUN adduser --disabled-password --gecos "" concrete5 \
+    && usermod -a -G 33 concrete5
+
 RUN /download-concrete5 $CONCRETE5_VERSION
 
 
@@ -51,5 +55,7 @@ EXPOSE 3306
 
 COPY docker/entrypoint.sh /usr/local/bin
 RUN dos2unix /usr/local/bin/entrypoint.sh
+
+RUN chown concrete5:www-data /var/www/html && chmod 775 /var/www/html && chmod ug+s /var/www/html
 
 ENTRYPOINT exec bash -v /usr/local/bin/entrypoint.sh

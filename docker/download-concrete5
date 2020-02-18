@@ -26,6 +26,7 @@ if [ -f /tmp/$concrete5_unzip_name$concrete5_version/composer.json ]; then
     cd /tmp/$concrete5_unzip_name$concrete5_version
     composer install
 fi
+chown -R 1000:www-data /tmp/$concrete5_unzip_name$concrete5_version/
 rm /usr/local/bin/concrete5.zip
 cd /tmp
 zip -q -r /usr/local/bin/concrete5.zip $concrete5_unzip_name$concrete5_version
