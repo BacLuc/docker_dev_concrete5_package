@@ -37,4 +37,8 @@ chmod -R 754 $CONCRETE5_DIR/application/config/database.php
 chmod -R 774 $CONCRETE5_DIR/packages
 chmod -R ug+w $CONCRETE5_DIR/packages
 
+mkdir -p $CONCRETE5_DIR/.composer
+chown -R concrete5:www-data $CONCRETE5_DIR/.composer
+chmod -R ug+w $CONCRETE5_DIR/.composer
+
 /usr/sbin/apache2ctl -DFOREGROUND
