@@ -1,3 +1,4 @@
+include Make-install-package
 #CREATE DATABASE concrete5 collate utf8mb4_bin;
 #GRANT ALL PRIVILEGES ON concrete5.* TO 'concrete5'@'%' IDENTIFIED BY 'concrete5';
 include .env
