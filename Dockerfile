@@ -58,4 +58,7 @@ RUN dos2unix /usr/local/bin/entrypoint.sh
 
 RUN chown concrete5:www-data /var/www/html && chmod 775 /var/www/html && chmod ug+s /var/www/html
 
+COPY docker/composerpkg /usr/local/bin/composerpkg
+RUN chmod +x /usr/local/bin/composerpkg
+
 ENTRYPOINT exec bash -v /usr/local/bin/entrypoint.sh
