@@ -41,4 +41,7 @@ mkdir -p $CONCRETE5_DIR/.composer
 chown -R concrete5:www-data $CONCRETE5_DIR/.composer
 chmod -R ug+w $CONCRETE5_DIR/.composer
 
+chown -R concrete5:www-data $CONCRETE5_DIR/packages/*/vendor || true
+chmod -R ug+w $CONCRETE5_DIR/packages/*/vendor || true
+
 /usr/sbin/apache2ctl -DFOREGROUND
