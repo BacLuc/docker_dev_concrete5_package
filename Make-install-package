@@ -1,4 +1,3 @@
-#sudo git clone git@github.com:BacLuc/basic_table_package.git concrete5/packages/basic_table_package
 
 bcc-composer-install:
 	docker-compose exec  --user www-data -w /var/www/html/packages/bacluc_c5_crud concrete5 composerpkg install
