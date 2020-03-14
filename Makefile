@@ -60,7 +60,7 @@ sync-back-files:
 remove: remove-db remove-files
 
 clear-cache:
-	docker-compose exec --user concrete5 concrete5 concrete/bin/concrete5 c5:clear-cache
+	docker-compose exec --user www-data concrete5 concrete/bin/concrete5 c5:clear-cache
 
 build-concrete5:
 	docker-compose build concrete5
