@@ -67,3 +67,8 @@ build-concrete5:
 
 logs-concrete5:
 	docker-compose logs concrete5
+
+profiler-activate:
+	docker-compose exec concrete5 sh -c "echo \"xdebug.profiler_enable=1\" >> /usr/local/etc/php/conf.d/20-xdebug.ini"
+	docker-compose exec concrete5 sh -c "echo \"xdebug.profiler_output_dir=/tmp\" >> /usr/local/etc/php/conf.d/20-xdebug.ini"
+	docker-compose exec concrete5 service apache2 reload
