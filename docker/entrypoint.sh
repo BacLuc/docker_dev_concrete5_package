@@ -33,6 +33,11 @@ chmod -R 774 $CONCRETE5_DIR/application/files
 chmod -R ug+w $CONCRETE5_DIR/application/files
 chmod -R 774 $CONCRETE5_DIR/application/config
 chmod -R ug+w $CONCRETE5_DIR/application/config
+chmod -R 774 $CONCRETE5_DIR/application/languages
+chmod -R ug+w $CONCRETE5_DIR/application/languages
+mkdir $CONCRETE5_DIR/application/languages/site || true
+chmod -R 774 $CONCRETE5_DIR/application/languages/site
+chmod -R ug+w $CONCRETE5_DIR/application/languages/site
 chmod -R 754 $CONCRETE5_DIR/application/config/database.php
 chmod -R 774 $CONCRETE5_DIR/packages
 chmod -R ug+w $CONCRETE5_DIR/packages
