@@ -73,3 +73,7 @@ profiler-activate:
 	docker-compose exec concrete5 sh -c "echo \"xdebug.profiler_enable=1\" >> /usr/local/etc/php/conf.d/20-xdebug.ini"
 	docker-compose exec concrete5 sh -c "echo \"xdebug.profiler_output_dir=/tmp\" >> /usr/local/etc/php/conf.d/20-xdebug.ini"
 	docker-compose exec concrete5 service apache2 reload
+
+restore-backup:
+	docker-compose exec db mysql --password=${MYSQL_ROOT_PASSWORD} -e "ALTER DATABASE ${MYSQL_DATABASE} CHARACTER SET = 'utf8mb4'  COLLATE = 'utf8mb4_general_ci';"
+	docker-compose exec -T db mysql --password=${MYSQL_ROOT_PASSWORD} concrete5 < docker/backup.sql

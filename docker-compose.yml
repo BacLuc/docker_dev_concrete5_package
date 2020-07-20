@@ -4,6 +4,7 @@ services:
     image: mariadb:10.1-bionic
     volumes:
       - mariadbdata:/var/lib/mysql
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
     env_file:
       - ./.env
     ports:
