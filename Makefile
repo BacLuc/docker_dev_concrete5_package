@@ -77,3 +77,6 @@ profiler-activate:
 restore-backup:
 	docker-compose exec db mysql --password=${MYSQL_ROOT_PASSWORD} -e "ALTER DATABASE ${MYSQL_DATABASE} CHARACTER SET = 'utf8mb4'  COLLATE = 'utf8mb4_general_ci';"
 	docker-compose exec -T db mysql --password=${MYSQL_ROOT_PASSWORD} concrete5 < docker/backup.sql
+
+backup:
+	docker-compose exec -T db mysqldump --password=${MYSQL_ROOT_PASSWORD} concrete5 > docker/$(shell date '+%Y-%m-%d-%H-%M-%S')-backup.sql
