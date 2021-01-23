@@ -1,10 +1,4 @@
-FROM php:7.1-apache
-MAINTAINER Lucius Bachmann <lucius.bachmann@gmx.ch>
-LABEL Description="Docker Container to develop concrete5 projects" \
-	License="Apache License 2.0" \
-	Usage="docker compose up" \
-    Version="1.0"
-
+FROM php:7.1-apache as php71
 RUN rm /etc/apt/preferences.d/no-debian-php
 RUN apt-get update
 RUN apt-get install -y dos2unix \
@@ -24,6 +18,14 @@ RUN docker-php-ext-install gd
 RUN docker-php-ext-install zip
 RUN pecl install xdebug-2.9.6
 RUN a2enmod rewrite
+
+
+FROM php72
+MAINTAINER Lucius Bachmann <lucius.bachmann@gmx.ch>
+LABEL Description="Docker Container to develop concrete5 projects" \
+	License="Apache License 2.0" \
+	Usage="docker compose up" \
+    Version="1.0"
 
 RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
