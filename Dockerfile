@@ -1,11 +1,12 @@
-FROM php:7.2-apache as php
+FROM php:7.4.14-apache as php
 RUN rm /etc/apt/preferences.d/no-debian-php
 RUN apt-get update
 RUN apt-get install -y libjpeg-dev \
                        libpng-dev \
-                       libfreetype6-dev
+                       libfreetype6-dev \
+                       libzip-dev
 RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install zip
 RUN pecl install xdebug-2.9.6
