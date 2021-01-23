@@ -30,7 +30,7 @@ setup-db:
 wait:
 	sleep 60
 
-rebuild: remove start wait setup-db wait sync-back-files stop
+rebuild: remove start wait setup-db
 
 grant:
 	docker-compose exec db mysql -p -e ${GRANT}
