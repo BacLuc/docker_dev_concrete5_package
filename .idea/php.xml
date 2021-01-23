@@ -79,12 +79,12 @@
   <component name="PhpInterpreters">
     <interpreters>
       <interpreter id="d4bb8747-b1d4-4298-b706-d0572484819a" name="concrete5" home="docker-compose://DATA" debugger_id="php.debugger.XDebug" debugger_extension="xdebug.so">
-        <remote_data DOCKER_ACCOUNT_NAME="Docker" DOCKER_COMPOSE_SERVICE_NAME="concrete5" DOCKER_REMOTE_PROJECT_PATH="/opt/project" INTERPRETER_PATH="php" HELPERS_PATH="/opt/.phpstorm_helpers" INITIALIZED="false" VALID="true" RUN_AS_ROOT_VIA_SUDO="false">
+        <remote_data INTERPRETER_PATH="php" HELPERS_PATH="/opt/.phpstorm_helpers" INITIALIZED="false" VALID="true" RUN_AS_ROOT_VIA_SUDO="false" DOCKER_ACCOUNT_NAME="Docker" DOCKER_COMPOSE_SERVICE_NAME="concrete5" DOCKER_REMOTE_PROJECT_PATH="/opt/project">
+          <type_data command="RUN" />
           <dockerComposeConfigurationPaths>
             <item value="$PROJECT_DIR$/docker-compose.yml" />
           </dockerComposeConfigurationPaths>
           <envs />
-          <type_data command="RUN" />
         </remote_data>
       </interpreter>
     </interpreters>
@@ -139,7 +139,7 @@
       </interpreter>
     </phpInfoCache>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
   <component name="PhpUnit">
     <phpunit_settings>
       <phpunit_by_interpreter interpreter_id="d4bb8747-b1d4-4298-b706-d0572484819a" custom_loader_path="/var/www/html/packages/bacluc_c5_crud/vendor/autoload.php" phpunit_phar_path="" />
