@@ -19,6 +19,27 @@ RUN docker-php-ext-install zip
 RUN pecl install xdebug-2.9.6
 RUN a2enmod rewrite
 
+FROM php:7.2-apache as php72
+RUN rm /etc/apt/preferences.d/no-debian-php
+RUN apt-get update
+RUN apt-get install -y dos2unix \
+                       mariadb-client \
+                       iproute2 \
+                       gettext-base \
+                       unzip \
+                       wget \
+                       git \
+                       zip \
+                       libjpeg-dev \
+                       libpng-dev \
+                       libfreetype6-dev
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-install gd
+RUN docker-php-ext-install zip
+RUN pecl install xdebug-2.9.6
+RUN a2enmod rewrite
+
 
 FROM php72
 MAINTAINER Lucius Bachmann <lucius.bachmann@gmx.ch>
