@@ -85,4 +85,6 @@ RUN chown concrete5:www-data /var/www/html && chmod 775 /var/www/html && chmod u
 COPY docker/composerpkg /usr/local/bin/composerpkg
 RUN chmod +x /usr/local/bin/composerpkg
 
+ENV APACHE_RUN_USER=concrete5
+
 ENTRYPOINT exec bash -v /usr/local/bin/entrypoint.sh

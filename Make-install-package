@@ -1,4 +1,4 @@
-export C5_COMMAND=docker-compose exec --user www-data concrete5 concrete/bin/concrete5
+export C5_COMMAND=docker-compose exec -u concrete5 concrete5 concrete/bin/concrete5
 bcc-composer-install:
 	docker-compose exec  --user concrete5 -w /var/www/html/packages/bacluc_c5_crud concrete5 composer install --no-dev
 
