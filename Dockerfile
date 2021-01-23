@@ -1,4 +1,4 @@
-FROM php:7.2-apache as php72
+FROM php:7.2-apache as php
 RUN rm /etc/apt/preferences.d/no-debian-php
 RUN apt-get update
 RUN apt-get install -y libjpeg-dev \
@@ -12,7 +12,7 @@ RUN pecl install xdebug-2.9.6
 RUN a2enmod rewrite
 
 
-FROM php72
+FROM php
 MAINTAINER Lucius Bachmann <lucius.bachmann@gmx.ch>
 LABEL Description="Docker Container to develop concrete5 projects" \
 	License="Apache License 2.0" \
