@@ -1,15 +1,7 @@
 FROM php:7.2-apache as php72
 RUN rm /etc/apt/preferences.d/no-debian-php
 RUN apt-get update
-RUN apt-get install -y dos2unix \
-                       mariadb-client \
-                       iproute2 \
-                       gettext-base \
-                       unzip \
-                       wget \
-                       git \
-                       zip \
-                       libjpeg-dev \
+RUN apt-get install -y libjpeg-dev \
                        libpng-dev \
                        libfreetype6-dev
 RUN docker-php-ext-install pdo_mysql
@@ -26,6 +18,15 @@ LABEL Description="Docker Container to develop concrete5 projects" \
 	License="Apache License 2.0" \
 	Usage="docker compose up" \
     Version="1.0"
+
+RUN apt-get install -y dos2unix \
+                       mariadb-client \
+                       iproute2 \
+                       gettext-base \
+                       unzip \
+                       wget \
+                       git \
+                       zip
 
 RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
 
