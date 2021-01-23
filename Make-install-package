@@ -12,7 +12,7 @@ bcc-uninstall:
 	${C5_COMMAND} c5:package-uninstall bacluc_c5_crud
 
 bcc-download:
-	git clone -b rewrite git@github.com:BacLuc/bacluc_c5_crud.git concrete5/packages/bacluc_c5_crud
+	git clone git@github.com:BacLuc/bacluc_c5_crud.git concrete5/packages/bacluc_c5_crud
 
 bep-install-pkg:
 	${C5_COMMAND} c5:package-install bacluc_event_package
@@ -21,7 +21,7 @@ bep-uninstall:
 	${C5_COMMAND} c5:package-uninstall bacluc_event_package
 
 bep-download:
-	git clone -b rewrite git@github.com:BacLuc/bacluc_event_package.git concrete5/packages/bacluc_event_package
+	git clone git@github.com:BacLuc/bacluc_event_package.git concrete5/packages/bacluc_event_package
 
 boa-install-pkg:
 	${C5_COMMAND} c5:package-install bacluc_oauth_authtype
@@ -30,4 +30,4 @@ boa-uninstall:
 	${C5_COMMAND} c5:package-uninstall bacluc_oauth_authtype
 
 boa-download:
-	git clone -b rewrite git@github.com:BacLuc/bacluc_oauth_authtype.git concrete5/packages/bacluc_oauth_authtype
+	git clone git@github.com:BacLuc/bacluc_oauth_authtype.git concrete5/packages/bacluc_oauth_authtype
