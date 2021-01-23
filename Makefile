@@ -5,6 +5,7 @@ include .env
 export $(shell sed 's/=.*//' .env)
 export DROP_DB="DROP DATABASE IF EXISTS ${MYSQL_DATABASE}"
 export CREATE_DB="CREATE DATABASE ${MYSQL_DATABASE} collate utf8mb4_bin;"
+export CONCRETE5_SERVICE=$(shell docker-compose ps -q concrete5)
 export GRANT="GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
 export USER=$(shell whoami)
 
@@ -43,15 +44,11 @@ remove-db:
 remove-files:
 	sudo rm -rf concrete5
 
-sync-files:
-	docker-compose exec rsync rsync -rtog /mnt/html/ /var/www/html/
+sync-into-container:
+	docker cp concrete5/. ${CONCRETE5_SERVICE}:/var/www/html
 
-sync-back-files:
-	docker-compose exec rsync rsync -rtog /var/www/html/ /mnt/html/
-	docker run --rm -v docker_dev_concrete5_package_vendor:/from \
-	  -v $(pwd)/concrete5/concrete/vendor:/to \
-	  bacluc/rsync:1.0  \
-	  rsync -rtog /from/ /to/
+sync-from-container:
+	docker cp ${CONCRETE5_SERVICE}:/var/www/html/. concrete5
 
 remove: remove-db remove-files
 
