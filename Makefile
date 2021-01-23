@@ -42,7 +42,7 @@ remove-db:
 	docker-compose down -v
 
 remove-files:
-	sudo rm -rf concrete5
+	rm -rf concrete5
 
 sync-into-container:
 	docker cp concrete5/. ${CONCRETE5_SERVICE}:/var/www/html
