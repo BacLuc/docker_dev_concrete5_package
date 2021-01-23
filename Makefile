@@ -29,7 +29,7 @@ setup-db:
 set-permissions:
 	sudo chown -R ${USER}:www-data concrete5/
 	sudo chmod -R ug+w concrete5/packages/*/vendor || true
-	sudo chmod -R ug+w concrete5/application/languages || true
+	sudo chmod -R ug+w concrete5/application/ || true
 
 wait:
 	sleep 60
