@@ -1,15 +1,14 @@
-FROM php:7.4.14-apache as php
+FROM php:8.0.14-apache as php
 RUN rm /etc/apt/preferences.d/no-debian-php
 RUN apt-get update
 RUN apt-get install -y libjpeg-dev \
                        libpng-dev \
                        libfreetype6-dev \
+                       libicu-dev \
                        libzip-dev
-RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
-RUN docker-php-ext-install gd
-RUN docker-php-ext-install zip
-RUN pecl install xdebug-2.9.6
+RUN docker-php-ext-install gd intl pdo_mysql zip
+RUN pecl install xdebug-3.1.2
 RUN a2enmod rewrite
 
 
@@ -38,7 +37,7 @@ RUN mkdir -p /root/.ssh \
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 #RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=1.10.19
+RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=2.2.4
 RUN rm composer-setup.php
 
 ARG CONCRETE5_VERSION

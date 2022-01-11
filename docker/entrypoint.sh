@@ -5,9 +5,9 @@ set -eu
 XDEBUG_FILE=/usr/local/etc/php/conf.d/20-xdebug.ini
 GATEWAY=$(ip route show dev eth0 | awk '/default/ { print $3 }')
 echo "zend_extension=xdebug.so" > $XDEBUG_FILE
-echo "xdebug.remote_enable=on" >> $XDEBUG_FILE
+echo "xdebug.mode=debug" >> $XDEBUG_FILE
 echo "xdebug.remote_autostart=off" >> $XDEBUG_FILE
-echo "xdebug.remote_host=$GATEWAY" >> $XDEBUG_FILE
+echo "xdebug.client_host=$GATEWAY" >> $XDEBUG_FILE
 
 CONCRETE5_DIR=/var/www/html
 
