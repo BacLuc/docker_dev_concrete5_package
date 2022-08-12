@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 include Make-install-package
 #CREATE DATABASE concrete5 collate utf8mb4_bin;
 #GRANT ALL PRIVILEGES ON concrete5.* TO 'concrete5'@'%' IDENTIFIED BY 'concrete5';
@@ -42,7 +44,8 @@ remove-db:
 	docker-compose down -v
 
 remove-files:
-	rm -rf concrete5
+	set +x
+	rm -rf 'concrete5/!(packages)'
 
 sync-into-container:
 	docker cp concrete5/. ${CONCRETE5_SERVICE}:/var/www/html

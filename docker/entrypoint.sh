@@ -14,7 +14,9 @@ CONCRETE5_DIR=/var/www/html
 if [ ! -f $CONCRETE5_DIR/application/config/database.php ]; then
    rm -rf /tmp/concrete*
    unzip  -qq /usr/local/bin/concrete5.zip -d /tmp
-   rm -rf $CONCRETE5_DIR/*
+   cd $CONCRETE5_DIR
+   rm -rf '!(packages)'
+   cd ..
    cp -a /tmp/concrete*/* $CONCRETE5_DIR/
 
    mkdir -p $CONCRETE5_DIR/application/config
