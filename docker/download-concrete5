@@ -11,6 +11,9 @@ concrete5_version=$1
 if [ $(version $concrete5_version) -eq $(version "5.7.5.13") ]; then
     download_url=$CONCRETE5_5_7_LINK
     concrete5_unzip_name=concrete
+elif [ $(version $concrete5_version) -ge $(version "9.1.1") ]; then
+    download_url=$GIT_RELEASES_LINK/$concrete5_version
+    concrete5_unzip_name="concretecms-"
 elif [ $(version $concrete5_version) -ge $(version "8.1.0") ]; then
     download_url=$GIT_RELEASES_LINK/$concrete5_version
     concrete5_unzip_name="concrete5-"
