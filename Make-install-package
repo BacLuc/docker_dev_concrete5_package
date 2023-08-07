@@ -1,11 +1,11 @@
 SHELL := /bin/bash
 
-export C5_COMMAND=docker-compose exec -u concrete5 concrete5 concrete/bin/concrete5
+export C5_COMMAND=docker compose exec -u concrete5 concrete5 concrete/bin/concrete5
 bcc-composer-install:
-	docker-compose exec  --user concrete5 -w /var/www/html/packages/bacluc_c5_crud concrete5 composer install --no-dev
+	docker compose exec  --user concrete5 -w /var/www/html/packages/bacluc_c5_crud concrete5 composer install --no-dev
 
 bcc-composer-install-dev:
-	docker-compose exec  --user concrete5 -w /var/www/html/packages/bacluc_c5_crud concrete5 composer install --dev
+	docker compose exec  --user concrete5 -w /var/www/html/packages/bacluc_c5_crud concrete5 composer install --dev
 
 bcc-install-pkg:
 	${C5_COMMAND} c5:package-install bacluc_c5_crud
