@@ -22,6 +22,15 @@ bep-install-pkg:
 bep-uninstall:
 	${C5_COMMAND} c5:package-uninstall bacluc_event_package
 
+bep-composer-install:
+	docker compose exec  --user concrete5 -w /var/www/html/packages/bacluc_event_package concrete5 composer install --no-dev
+
+bep-composer-install-dev:
+	docker compose exec  --user concrete5 -w /var/www/html/packages/bacluc_event_package concrete5 composer install --dev
+	
+bep-composer-cs-fix:
+	docker compose exec  --user concrete5 -w /var/www/html/packages/bacluc_event_package concrete5 composer cs-fix
+
 bep-download:
 	git clone git@github.com:BacLuc/bacluc_event_package.git concrete5/packages/bacluc_event_package
 
