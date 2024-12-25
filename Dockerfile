@@ -1,4 +1,4 @@
-FROM php:8.1-apache as php
+FROM php:8.3-apache as php
 RUN rm /etc/apt/preferences.d/no-debian-php
 RUN apt-get update
 RUN apt-get install -y libjpeg-dev \
@@ -8,7 +8,7 @@ RUN apt-get install -y libjpeg-dev \
                        libzip-dev
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
 RUN docker-php-ext-install gd intl pdo_mysql zip
-RUN pecl install xdebug-3.1.2
+RUN pecl install xdebug-3.4.0
 RUN a2enmod rewrite
 
 
@@ -37,7 +37,7 @@ RUN mkdir -p /root/.ssh \
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 #RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=2.6.6
+RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=2.8.4
 RUN rm composer-setup.php
 
 ARG CONCRETE5_VERSION
