@@ -13,7 +13,6 @@ RUN a2enmod rewrite
 
 
 FROM php
-MAINTAINER Lucius Bachmann <lucius.bachmann@gmx.ch>
 LABEL Description="Docker Container to develop concrete5 projects" \
 	License="Apache License 2.0" \
 	Usage="docker compose up" \
